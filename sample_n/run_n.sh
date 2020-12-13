@@ -34,7 +34,7 @@ CA=NA
 SA=CL
 
 #Number of ion pairs
-n=4
+n=${1:-4}
 
 #Inner shell radius (nm)
 R0=1
