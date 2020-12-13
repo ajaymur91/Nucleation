@@ -1,0 +1,12 @@
+#include "atomtypes.itp"
+#include "NA.itp"
+#include "CL.itp"
+#include "HOH.itp"
+#include "ghost.itp"
+
+[ system ]
+; Name
+Generic title
+
+[ molecules ]
+; Compound       #mols

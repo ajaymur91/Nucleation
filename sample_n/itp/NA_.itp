@@ -1,0 +1,9 @@
+[ moleculetype ]
+; Name            nrexcl
+NA          3
+
+[ atoms ]
+;   nr       type  resnr residue  atom   cgnr    charge       mass  typeB    chargeB      massB
+; residue    1 Na+ rtp Na+ q 1.0
+    1        Na1_      1    Na+     Na      1 1.00000000  22.989769   ; qtot 1.000000
+

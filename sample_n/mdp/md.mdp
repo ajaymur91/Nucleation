@@ -1,0 +1,113 @@
+;title                   =  TI
+;define                  = -DPOSRES  ; position restrain the ion
+
+; We remove center of mass motion.  In periodic boundary conditions, the center of mass motion is spurious; the periodic system is the same in all translational directions.
+comm-mode                = Linear
+; number of steps for center of mass motion removal =
+nstcomm                  = 10
+
+; Run parameters
+integrator              = md        ; leap-frog integrator
+nsteps                  = 10000000    ; 2 * 1000000 = 20000 ps 
+dt                      = 0.001     ; 2 fs
+; Output control
+nstxout                 = 0         ; suppress bulky .trr file by specifying 
+nstvout                 = 0         ; 0 for output frequency of nstxout,
+nstfout                 = 0         ; nstvout, and nstfout
+nstenergy               = 1000      ; save energies every 10.0 ps
+nstlog                  = 5000      ; update log file every 10.0 ps
+nstxout-compressed      = 1000      ; save compressed coordinates every 10.0 ps
+compressed-x-grps       = System    ; save the whole system
+; Bond parameters
+continuation            = no       ; Restarting after NPT 
+;gen-vel                 = yes
+constraint_algorithm    = lincs     ; holonomic constraints 
+constraints             = h-bonds   ; bonds involving H are constrained
+lincs_iter              = 1         ; accuracy of LINCS
+lincs_order             = 4         ; also related to accuracy
+; Neighborsearching
+cutoff-scheme           = Verlet    ; Buffered neighbor searching
+ns_type                 = grid      ; search neighboring grid cells
+nstlist                 = 10        ; 20 fs, largely irrelevant with Verlet scheme
+rcoulomb                = 1.0       ; short-range electrostatic cutoff (in nm)
+rvdw                    = 1.0       ; short-range van der Waals cutoff (in nm)
+; Electrostatics
+coulombtype             = PME       ; Particle Mesh Ewald for long-range electrostatics
+pme_order               = 4         ; cubic interpolation
+fourierspacing          = 0.16      ; grid spacing for FFT
+; Temperature coupling is on
+tcoupl                  = nose-hoover           ; modified Berendsen thermostat
+tc-grps                 = system                ; two coupling groups - more accurate
+tau_t                   = 2.0                     ; time constant, in ps
+ref_t                   = 300                   ; reference temperature, one for each group, in K
+; Pressure coupling is on
+pcoupl                  = parrinello-rahman     ; Pressure coupling on in NPT
+pcoupltype              = isotropic             ; uniform scaling of box vectors
+tau_p                   = 4.0                   ; time constant, in ps
+ref_p                   = 1.0                   ; reference pressure, in bar
+compressibility         = 4.5e-5                ; isothermal compressibility of water, bar^-1
+;refcoord_scaling        = com
+; Periodic boundary conditions
+pbc                     = xyz       ; 3-D PBC
+; Dispersion correction
+DispCorr                = EnerPres  ; account for cut-off vdW scheme
+
+;; We don't strictly need these, because it already has velocities
+;; that are at the right temperature.  But including this is safer.
+;----------
+;;gen_vel                  = yes
+;;gen_temp                 = 300
+;;gen_seed                 = 12  ; make sure you set the seed to be able to reproduce the simulation
+;
+;;--------------------
+;; Free energy parameters
+;free-energy               = yes
+;
+;sc-alpha                  = 0.5
+;sc-r-power                = 6
+;sc-power                  = 1
+;; The following parameters describe a particularly efficient path
+;; for small molecule solvation.  But it's not THAT much better
+;; than the above choice, and it sometimes dies when run
+;; in single precision
+;;--------
+;;sc-alpha                 = 0.001
+;;sc-power                 = 1
+;;sc-r-power               = 48
+;;-------
+;
+;
+;; Which intermediate state are we simulating?
+;-------
+;init-lambda-state        = XXX
+;
+;; What are the values of lambda at the intermediate states?
+;;-------
+;coul-lambdas             = 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.1 0.3 0.5 0.75 1.0 
+;vdw-lambdas              = 0.0 0.1 0.2 0.4 0.6 0.8 1.0 1.0 1.0 1.0 1.00 1.0 
+;
+;;coul-lambdas             = 0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0
+;;vdw-lambdas              = 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0
+;
+;; This makes sure we print out the differences in Hamiltonians between all states, and not just the neighboring states
+;;--------
+;calc-lambda-neighbors = -1
+;
+;; the frequency the free energy information is calculated.  This
+;; frequency (every 0.2 ps) is pretty good for small molecule solvation.
+;;-------
+;nstdhdl                  = 100
+;
+;; not required, but useful if you are doing any temperature reweighting.  Without
+;; temperature reweighting, you don't need the total energy -- differences are enough
+;dhdl-print-energy        = yes
+;
+;; We are doing free energies with the ethanol molecule alone
+;couple-moltype           = ghost
+;; we are changing both the  vdw and the charge.  In the initial state, both are on
+;couple-lambda0           = none
+;; in the final state, both are off.
+;couple-lambda1           = vdw-q
+;; we are keeping the intramolecular interactions ON in all the interactions from state 0 to state 8
+;couple-intramol          = no
+ 
