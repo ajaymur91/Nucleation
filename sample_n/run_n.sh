@@ -195,5 +195,3 @@ EOF
 ###############################
 
 bash run_hrex.sh 
-b=$(gmx check -f topol0/topol.xtc &> /dev/stdout | grep Step| awk '{print $2*$3/2}')
-echo 0 | gmx trjconv -f topol0/topol.xtc -s topol0/topol.tpr -o config/.gro -b $b -sep

@@ -14,7 +14,7 @@ export spack_root=/home/ajay/software/spack
 export GMX_MAXBACKUP=-1
 export PLUMED_MAXBACKUP=-1
 
-nsteps=10000
+nsteps=20000
 replex=1000
 n_mst=100
 nrep=12
